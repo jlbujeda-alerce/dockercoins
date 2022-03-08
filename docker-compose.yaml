@@ -68,6 +68,8 @@ services:
     image: jlbujeda/dockercoins-webui:latest
     networks:
       - redis
+    ports:
+      - 8080:8080
     secrets:
       - 
         mode: 0400
