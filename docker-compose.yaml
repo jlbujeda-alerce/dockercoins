@@ -29,7 +29,7 @@ services:
         mode: 0400
         source: hasher
         target: /app/hasher.rb
-        uid: 65534
+        uid: '65534'
     user: nobody
     working_dir: /app/
   redis:
@@ -57,7 +57,7 @@ services:
         mode: 0400
         source: rng
         target: /app/rng.py
-        uid: 65534
+        uid: '65534'
     user: nobody
     working_dir: /app/
   webui:
@@ -73,7 +73,7 @@ services:
         mode: 0400
         source: webui
         target: /app/webui.js
-        uid: 65534
+        uid: '65534'
     user: nobody
     working_dir: /app/
   worker:
@@ -91,7 +91,7 @@ services:
         mode: 0400
         source: worker
         target: /app/worker.py
-        uid: 65534
+        uid: '65534'
     user: nobody
     working_dir: /app/
 volumes:
