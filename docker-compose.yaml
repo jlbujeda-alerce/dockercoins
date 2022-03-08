@@ -1,0 +1,98 @@
+version: '3.9'
+networks:
+  hasher:
+    internal: true
+  redis:
+    internal: true
+  rng:
+    internal: true
+secrets:
+  hasher:
+    file: ./hasher/hasher.rb
+  rng:
+    file: ./rng/rng.py
+  webui:
+    file: ./webui/webui.js
+  worker:
+    file: ./worker/worker.py
+services:
+  hasher:
+    command: 
+      - hasher.rb
+    entrypoint:
+      - ruby
+    image: jlbujeda/dockercoins-hasher:latest
+    networks:
+      - hasher
+    secrets:
+      - 
+        mode: 0400
+        source: hasher
+        target: /app/hasher.rb
+        uid: 65534
+    user: nobody
+    working_dir: /app/
+  redis:
+    image: redis:latest
+    networks:
+      - redis
+    user: redis
+    volumes:
+      - 
+        read_only: false
+        source: redis
+        target: /data/
+        type: volume
+    working_dir: /data/
+  rng:
+    command: 
+      - rng.py
+    entrypoint:
+      - python
+    image: jlbujeda/dockercoins-rng:latest
+    networks:
+      - rng
+    secrets:
+      - 
+        mode: 0400
+        source: rng
+        target: /app/rng.py
+        uid: 65534
+    user: nobody
+    working_dir: /app/
+  webui:
+    command: 
+      - webui.js
+    entrypoint:
+      - node
+    image: jlbujeda/dockercoins-webui:latest
+    networks:
+      - redis
+    secrets:
+      - 
+        mode: 0400
+        source: webui
+        target: /app/webui.js
+        uid: 65534
+    user: nobody
+    working_dir: /app/
+  worker:
+    command: 
+      - worker.py
+    entrypoint:
+      - python
+    image: jlbujeda/dockercoins-worker:latest
+    networks:
+      - hasher
+      - redis
+      - rng
+    secrets:
+      - 
+        mode: 0400
+        source: worker
+        target: /app/worker.py
+        uid: 65534
+    user: nobody
+    working_dir: /app/
+volumes:
+  redis:
