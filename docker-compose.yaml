@@ -19,6 +19,10 @@ services:
   hasher:
     command: 
       - hasher.rb
+    deploy:
+      placement:
+        constraints:
+          - node.role == work
     entrypoint:
       - ruby
     image: jlbujeda/dockercoins-hasher:latest
@@ -33,6 +37,10 @@ services:
     user: nobody
     working_dir: /app/
   redis:
+    deploy:
+      placement:
+        constraints:
+          - node.role == work
     image: redis:latest
     networks:
       - redis
@@ -47,6 +55,10 @@ services:
   rng:
     command: 
       - rng.py
+    deploy:
+      placement:
+        constraints:
+          - node.role == work
     entrypoint:
       - python
     image: jlbujeda/dockercoins-rng:latest
@@ -63,6 +75,10 @@ services:
   webui:
     command: 
       - webui.js
+    deploy:
+      placement:
+        constraints:
+          - node.role == work
     entrypoint:
       - node
     image: jlbujeda/dockercoins-webui:latest
@@ -81,6 +97,10 @@ services:
   worker:
     command: 
       - worker.py
+    deploy:
+      placement:
+        constraints:
+          - node.role == work
     entrypoint:
       - python
     image: jlbujeda/dockercoins-worker:latest
