@@ -22,7 +22,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == work
+          - node.role == worker
     entrypoint:
       - ruby
     image: jlbujeda/dockercoins-hasher:latest
@@ -40,7 +40,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == work
+          - node.role == worker
     image: redis:latest
     networks:
       - redis
@@ -58,7 +58,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == work
+          - node.role == worker
     entrypoint:
       - python
     image: jlbujeda/dockercoins-rng:latest
@@ -78,7 +78,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == work
+          - node.role == worker
     entrypoint:
       - node
     image: jlbujeda/dockercoins-webui:latest
@@ -100,7 +100,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == work
+          - node.role == worker
     entrypoint:
       - python
     image: jlbujeda/dockercoins-worker:latest
