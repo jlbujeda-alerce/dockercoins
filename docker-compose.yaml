@@ -1,22 +1,22 @@
 version: '3.9'
 networks:
-  hasher:
+  network-hasher:
     internal: true
-  redis:
+  network-redis:
     internal: true
-  rng:
+  network-rng:
     internal: true
 secrets:
-  hasher:
+  secret-hasher:
     file: ./hasher/hasher.rb
-  rng:
+  secret-rng:
     file: ./rng/rng.py
-  webui:
+  secret-webui:
     file: ./webui/webui.js
-  worker:
+  secret-worker:
     file: ./worker/worker.py
 services:
-  hasher:
+  svc-hasher:
     command: 
       - hasher.rb
     deploy:
@@ -29,16 +29,16 @@ services:
       - 8080/TCP
     image: jlbujeda/dockercoins-hasher:latest
     networks:
-      - hasher
+      - network-hasher
     secrets:
       - 
         mode: 0400
-        source: hasher
+        source: secret-hasher
         target: /app/hasher.rb
         uid: '65534'
     user: nobody
     working_dir: /app/
-  redis:
+  svc-redis:
     deploy:
       placement:
         constraints:
@@ -47,16 +47,16 @@ services:
       - 6379/TCP
     image: redis:latest
     networks:
-      - redis
+      - network-redis
     user: redis
     volumes:
       - 
         read_only: false
-        source: redis
+        source: volume-redis
         target: /data/
         type: volume
     working_dir: /data/
-  rng:
+  svc-rng:
     command: 
       - rng.py
     deploy:
@@ -69,16 +69,16 @@ services:
       - 8080/TCP
     image: jlbujeda/dockercoins-rng:latest
     networks:
-      - rng
+      - network-rng
     secrets:
       - 
         mode: 0400
-        source: rng
+        source: secret-rng
         target: /app/rng.py
         uid: '65534'
     user: nobody
     working_dir: /app/
-  webui:
+  svc-webui:
     command: 
       - webui.js
     deploy:
@@ -91,7 +91,7 @@ services:
       - 8080/TCP
     image: jlbujeda/dockercoins-webui:latest
     networks:
-      - redis
+      - network-redis
     ports:
       - 
         protocol: TCP
@@ -100,12 +100,12 @@ services:
     secrets:
       - 
         mode: 0400
-        source: webui
+        source: secret-webui
         target: /app/webui.js
         uid: '65534'
     user: nobody
     working_dir: /app/
-  worker:
+  svc-worker:
     command: 
       - worker.py
     deploy:
@@ -116,16 +116,16 @@ services:
       - python
     image: jlbujeda/dockercoins-worker:latest
     networks:
-      - hasher
-      - redis
-      - rng
+      - network-hasher
+      - network-redis
+      - network-rng
     secrets:
       - 
         mode: 0400
-        source: worker
+        source: secret-worker
         target: /app/worker.py
         uid: '65534'
     user: nobody
     working_dir: /app/
 volumes:
-  redis:
+  volume-redis:
