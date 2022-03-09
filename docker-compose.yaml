@@ -42,7 +42,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == worker
+          - node.role == master
     expose:
       - 6379/TCP
     image: redis:latest
@@ -62,7 +62,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == worker
+          - node.role == master
     entrypoint:
       - python
     expose:
@@ -84,7 +84,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == worker
+          - node.role == master
     entrypoint:
       - node
     expose:
@@ -111,7 +111,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == worker
+          - node.role == master
     entrypoint:
       - python
     image: jlbujeda/dockercoins-worker:latest
