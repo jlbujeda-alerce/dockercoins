@@ -18,7 +18,7 @@ redis = Redis("svc-redis")
 
 
 def get_random_bytes():
-    r = requests.get("http://rng:8080/32")
+    r = requests.get("http://svc-rng:8080/32")
     return r.content
 
 
