@@ -26,7 +26,7 @@ services:
     entrypoint:
       - ruby
     expose:
-      - 8080/asdasd
+      - 8080/TCP
     image: jlbujeda/dockercoins-hasher:latest
     networks:
       - hasher
@@ -44,7 +44,7 @@ services:
         constraints:
           - node.role == worker
     expose:
-      - 6379
+      - 6379/TCP
     image: redis:latest
     networks:
       - redis
@@ -66,7 +66,7 @@ services:
     entrypoint:
       - python
     expose:
-      - 8080
+      - 8080/TCP
     image: jlbujeda/dockercoins-rng:latest
     networks:
       - rng
@@ -88,7 +88,7 @@ services:
     entrypoint:
       - node
     expose:
-      - 8080
+      - 8080/TCP
     image: jlbujeda/dockercoins-webui:latest
     networks:
       - redis
