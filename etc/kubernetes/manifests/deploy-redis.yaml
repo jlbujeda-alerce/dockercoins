@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      dockercoins: redis
+  template:
+    metadata:
+      labels:
+        dockercoins: redis
+    spec:
+      containers:
+        -
+          env:
+            -
+              name: AUTOR
+              value: Alerce
+          image: redis:latest
+          name: container-redis
+          ports:
+            -
+              containerPort: 6379
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /data/
+              name: volume-redis
+              readOnly: false
+          workingDir: /data/
+      volumes:
+        -
+          name: volume-redis
+          persistentVolumeClaim: 
+            claimName: pvc-redis
+            readOnly: false
