@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ds-rng
+spec:
+  selector:
+    matchLabels:
+      dockercoins: rng
+  template:
+    metadata:
+      labels:
+        dockercoins: rng
+    spec:
+      containers:
+        -
+          args:
+            -
+              rng.py
+          command:
+            -
+              python
+          env:
+            -
+              name: AUTOR
+              value: Alerce
+          image: jlbujeda/dockercoins-rng:latest
+          name: container-rng
+          ports:
+            -
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /app/rng.py
+              name: volume-rng
+              readOnly: true
+              subPath: rng.py
+          workingDir: /app/
+      volumes:
+        -
+          name: volume-rng
+          secret: 
+            defaultMode: 0400
+            items:
+              -
+                key: rng.py
+                mode: 0400
+                path: rng.py
+            secretName: secret-rng
+  
