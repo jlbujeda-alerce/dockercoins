@@ -22,7 +22,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.role == worker
+          - node.role == master
     entrypoint:
       - ruby
     expose:
