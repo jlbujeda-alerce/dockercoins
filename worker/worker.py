@@ -14,7 +14,7 @@ else:
     logging.getLogger("requests").setLevel(logging.WARNING)
 
 
-redis = Redis("redis")
+redis = Redis("svc-redis")
 
 
 def get_random_bytes():
@@ -23,7 +23,7 @@ def get_random_bytes():
 
 
 def hash_bytes(data):
-    r = requests.post("http://hasher:8080/",
+    r = requests.post("http://svc-hasher:8080/",
                       data=data,
                       headers={"Content-Type": "application/octet-stream"})
     hex_hash = r.text
