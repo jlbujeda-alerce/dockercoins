@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-hasher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      dockercoins: hasher
+  template:
+    metadata:
+      labels:
+        dockercoins: hasher
+    spec:
+      containers:
+        -
+          args:
+            -
+              hasher.rb
+          command:
+            -
+              ruby
+          env:
+            -
+              name: AUTOR
+              value: Alerce
+          image: jlbujeda/dockercoins-hasher:latest
+          name: container-hasher
+          ports:
+            -
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /app/hasher.rb
+              name: volume-hasher
+              readOnly: true
+              subPath: hasher.rb
+          workingDir: /app/
+      volumes:
+        -
+          name: volume-hasher
+          secret: 
+            defaultMode: 0400
+            items:
+              -
+                key: hasher.rb
+                mode: 0400
+                path: hasher.rb
+            secretName: secret-hasher
