@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sts-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      dockercoins: sts-redis
+  serviceName: svc-redis
+  template:
+    metadata:
+      labels:
+        dockercoins: sts-redis
+    spec:
+      containers:
+        -
+          env:
+            -
+              name: AUTOR
+              value: Alerce
+          image: redis:latest
+          name: container-redis
+          ports:
+            -
+              containerPort: 6379
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /data/
+              name: volume-redis
+              readOnly: false
+          workingDir: /data/
+  volumeClaimTemplates:
+    -
+      metadata:
+        name: volume-redis
+      spec:
+        accessModes:
+          -
+            ReadWriteOnce
+        resources:
+          limits:
+            storage: 1Gi
+          requests:
+            storage: 1Gi
+        storageClassName: gp2
+        volumeMode: Filesystem
