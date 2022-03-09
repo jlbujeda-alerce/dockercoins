@@ -93,7 +93,10 @@ services:
     networks:
       - redis
     ports:
-      - 8080:8080
+      - target: 8080
+        published: 8080
+        protocol: TCP
+        mode: host
     secrets:
       - 
         mode: 0400
