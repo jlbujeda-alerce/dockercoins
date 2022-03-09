@@ -26,7 +26,7 @@ services:
     entrypoint:
       - ruby
     expose:
-      - 8080/TCP
+      - 8080/asdasd
     image: jlbujeda/dockercoins-hasher:latest
     networks:
       - hasher
