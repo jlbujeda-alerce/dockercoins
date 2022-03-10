@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sts-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      dockercoins: sts-redis
+  template:
+    metadata:
+      labels:
+        dockercoins: sts-redis
+    spec:
+      containers:
+        -
+          env:
+            -
+              name: AUTOR
+              value: Alerce
+          image: redis:latest
+          name: container-redis
+          ports:
+            -
+              containerPort: 6379
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /data/
+              name: volume-redis
+              readOnly: false
+          workingDir: /data/
+      volumes:
+        -
+          name: volume-redis
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
