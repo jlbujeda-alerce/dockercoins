@@ -20,7 +20,7 @@ spec:
           protocol: TCP
   podSelector:
     matchLabels:
-      dockercoins: redis
+      dockercoins: sts-redis
   policyTypes:
     -
       Ingress
