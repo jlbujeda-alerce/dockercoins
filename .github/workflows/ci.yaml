@@ -1,0 +1,47 @@
+jobs:
+  kubernetes:
+    runs-on: ubuntu-18.04
+    steps:
+      -
+        name: check-resources
+        run: free -h; df -h; lscpu
+      -
+        name: checkout
+        uses: actions/checkout@v2
+      -
+        name: build-hasher
+        run: docker build -t jlbujeda/dockercoins-hasher:latest hasher/
+      -
+        name: build-rng
+        run: docker build -t jlbujeda/dockercoins-rng:latest rng/
+      -
+        name: build-webui
+        run: docker build -t jlbujeda/dockercoins-webui:latest webui/
+      -
+        name: build-worker
+        run: docker build -t jlbujeda/dockercoins-worker:latest worker/
+      -
+        name: kubernetes-install
+        run: |
+          git clone --single-branch -b v2.4 https://github.com/academiaonline-org/kubernetes
+          source kubernetes/bin/cluster/ubuntu18/install-docker-kubelet.sh
+          source kubernetes/bin/cluster/ubuntu18/install-leader.sh
+          master=$( kubectl get node | grep master | awk '{ print $1 }' )
+          kubectl taint node $master node-role.kubernetes.io/master:NoSchedule-
+          rm -rf kubernetes/
+      -
+        name: deploy
+        run: kubectl apply -f etc/kubernetes/manifests/
+      -
+        name: test-worker
+        run: |
+          while true
+          do sleep 10
+          kubectl logs deploy/deploy-worker 2>& 1 | grep Coin.found && break
+          done
+name: CI
+on:
+  push:
+    branches:
+      -
+        alerce-docker
