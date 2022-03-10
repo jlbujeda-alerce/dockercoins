@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      dockercoins: webui
+  template:
+    metadata:
+      labels:
+        dockercoins: webui
+    spec:
+      containers:
+        -
+          args:
+            -
+              webui.js
+          command:
+            -
+              node
+          env:
+            -
+              name: AUTOR
+              value: Alerce
+          image: jlbujeda/dockercoins-webui:latest
+          name: container-webui
+          ports:
+            -
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /app/webui.js
+              name: volume-webui
+              readOnly: true
+              subPath: webui.js
+          workingDir: /app/
+      volumes:
+        -
+          name: volume-webui
+          secret: 
+            defaultMode: 0400
+            items:
+              -
+                key: webui.js
+                mode: 0400
+                path: webui.js
+            secretName: secret-webui
