@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      dockercoins: worker
+  template:
+    metadata:
+      labels:
+        dockercoins: worker
+    spec:
+      containers:
+        -
+          args:
+            -
+              worker.py
+          command:
+            -
+              python
+          env:
+            -
+              name: AUTOR
+              value: Alerce
+          image: jlbujeda/dockercoins-worker:latest
+          name: container-hasher
+          ports:
+            -
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            -
+              mountPath: /app/worker.py
+              name: volume-worker
+              readOnly: true
+              subPath: worker.py
+          workingDir: /app/
+      volumes:
+        -
+          name: volume-worker
+          secret: 
+            defaultMode: 0400
+            items:
+              -
+                key: worker.py
+                mode: 0400
+                path: worker.py
+            secretName: secret-worker
